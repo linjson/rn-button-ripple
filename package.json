@@ -1,0 +1,32 @@
+{
+  "name": "rn-button-ripple",
+  "version": "0.0.1",
+  "description": "Ripple touch effect from Google Material Design.",
+  "main": "index.js",
+  "dependencies": {
+
+  },
+  "peerDependencies": {
+    "react-native": ">=0.5"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "touch",
+    "touchable",
+    "ripple",
+    "material"
+  ],
+  "devDependencies": {},
+  "author": {
+    "name": "linjson"
+    ""
+  },
+  "license": {
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/mit-license.php"
+  }
+
+}
