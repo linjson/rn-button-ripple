@@ -26,9 +26,14 @@ var TouchableRipple = React.createClass({
         this.props.onPress && this.props.onPress(e);
     },
     _onPressIn(e){
+        //this.setState({wrapStyle: this._wrapStyle(e.nativeEvent)});
+        //this._rippe();
 
-        this.setState({wrapStyle: this._wrapStyle(e.nativeEvent)});
-        this._rippe();
+        this.refs.res.measure((ox, oy, width, height, px, py)=> {
+            this.srcViewSize = {ox, oy, width, height, px, py};
+            this.setState({wrapStyle: this._wrapStyle(e.nativeEvent)});
+            this._rippe();
+        });
 
 
         this.props.onPressIn && this.props.onPressIn(e);
@@ -41,7 +46,11 @@ var TouchableRipple = React.createClass({
     _onLayout(e){
         //{nativeEvent: {layout: {x, y, width, height}}}
 
-        this.srcViewSize = e.nativeEvent.layout;
+        //this.srcViewSize = e.nativeEvent.layout;
+        //this.refs.res.measure((ox, oy, width, height, px, py)=> {
+        //    this.srcViewSize ={ox, oy, width, height, px, py};
+        //});
+
 
     },
 
@@ -64,29 +73,32 @@ var TouchableRipple = React.createClass({
 
     _wrapStyle(location){
 
+        if (location == null) {
+            return;
+        }
 
-        let {locationX,locationY,pageY}=location.changedTouches[0];
-
+        let {pageY,pageX}=location;
 
 
         let descStyle = {
             width: this.srcViewSize.width,
             height: this.srcViewSize.height,
-            borderRadius: this.props.style.borderRadius||0,
+            borderRadius: this.props.style.borderRadius || 0,
         };
 
-        console.log("_wrapStyle", descStyle)
+        console.log("_wrapStyle", location.touches[0])
 
         //return {
-        //    top:locationY,
+        //    top:0,
         //    left:locationX,
         //    width:200,
         //    height:50,
+        //    backgroundColor:'#ff0000'
         //}
 
-        let startY = locationY;
-        let startX = locationX;
-        let startRadius=Math.max(descStyle.height,descStyle.width);
+        let startY = pageY - this.srcViewSize.py;
+        let startX = pageX - this.srcViewSize.px;
+        let startRadius = Math.max(descStyle.height, descStyle.width);
         //console.log("startX", startX, "startY", startY, this.srcViewSize.width / 2, this.srcViewSize.height / 2)
         //let centerX = startX > this.srcViewSize.width / 2 ? startX : this.srcViewSize.width - startX;
         //let centerY = startY > this.srcViewSize.height / 2 ? startY : this.srcViewSize.height - startY;
@@ -155,7 +167,7 @@ var TouchableRipple = React.createClass({
         return <TouchableOpacity activeOpacity={1} onPress={this._onPress}
                                  onPressIn={this._onPressIn} onPressOut={this._onPressOut}>
 
-            <View onLayout={this._onLayout} style={[this.props.style,{overflow:'hidden'}]}>
+            <View ref="res" onLayout={this._onLayout} style={[this.props.style,{overflow:'hidden'}]}>
 
                 {
                     this.props.children
